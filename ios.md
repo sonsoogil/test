@@ -12,7 +12,8 @@ TestFlight는 iOS 앱의 베타 테스트를 쉽게 할 수 있는 애플 공식
 1. **공개 링크 열기**
    - 개발자가 제공한 TestFlight 공개 링크(웹 주소)를 iPhone의 Safari 또는 다른 웹 브라우저에서 엽니다.
 
-![TestFlight 설치 화면](testflight01.PNG)
+<img src="testflight01.PNG" alt="TestFlight 설치 화면" width="300"/>
+
 
 2. **TestFlight 설치 유도**
    - 기기에 TestFlight가 설치되어 있지 않으면, 링크를 열 때 자동으로 App Store의 TestFlight 설치 페이지로 이동합니다.
