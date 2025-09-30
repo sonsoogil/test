@@ -16,9 +16,9 @@ TestFlight는 iOS 앱의 베타 테스트를 쉽게 할 수 있는 애플 공식
    - 기기에 TestFlight가 설치되어 있지 않으면, 링크를 열 때 자동으로 App Store의 TestFlight 설치 페이지로 이동합니다.
    - App Store에서 "TestFlight" 앱을 설치합니다.
 
-<img src="testflight01.PNG" alt="TestFlight 설치 화면" width="300"/>
-<img src="testflight02.PNG" alt="TestFlight 설치 화면" width="300"/>
-<img src="testflight03.PNG" alt="TestFlight 설치 화면" width="300"/>
+<img src="testflight01.PNG" alt="TestFlight 설치 화면" width="300"/>  <img src="testflight02.PNG" alt="TestFlight 설치 화면" width="300"/>  <img src="testflight03.PNG" alt="TestFlight 설치 화면" width="300"/>
+
+
 
 3. **앱 설치 시작**
    - TestFlight 앱 설치가 완료되면, 다시 공개 링크로 돌아오거나 TestFlight에서 베타 앱 정보가 자동으로 표시됩니다.
