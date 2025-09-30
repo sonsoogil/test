@@ -11,12 +11,14 @@ Android 오픈베타 프로그램은 이메일이 등록된 유저는 링크를 
 1. **공개 링크 열기**
    - 개발자가 제공한 베타 링크(웹 주소)를 웹 브라우저에서 엽니다.
 
+
 2. **베타 프로그램 참여**
    - 기기에 TestFlight가 설치되어 있지 않으면, 링크를 열 때 자동으로 App Store의 TestFlight 설치 페이지로 이동합니다.
    - 다운로드 클릭해서 테스트 플라이트 설치 후 열기버튼을 선택합니다.
 
 <img src="screenshot/aos_01.jpeg" alt="TestFlight 설치 화면" width="300"/>  <img src="screenshot/aos_02.jpeg" alt="TestFlight 설치 화면" width="300"/>
 <img src="screenshot/aos_03.jpeg" alt="TestFlight 설치 화면" width="300"/>
+
 
 3. **이메일이 등록되지 않은 사용자**
    - 이메일이 등록되지 않은 사용자는 에러 메시지가 표시 됩니다
