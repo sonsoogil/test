@@ -10,13 +10,46 @@
             --coral: #FF6B6B;
             --bg: #F8F9FD;
             --white: #FFFFFF;
+            --text: #333333;
+            --text-sub: #888888;
+            --text-muted: #aaaaaa;
+            --card-bg: #F0F5FB;
+            --card-border: #E1EAF4;
+            --btn-bg: #F5F7FA;
+            --btn-border: #E1E8F0;
+            --btn-color: #666666;
+            --step-bg: #ffffff;
+            --step-border: #EFEFEF;
+            --shadow-map: 0 2px 8px rgba(0,0,0,0.15);
+            --shadow-ctrl: 0 -8px 28px rgba(0,0,0,0.09);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent: #5BA3F5;
+                --coral: #FF7F7F;
+                --bg: #0F1117;
+                --white: #1C1E26;
+                --text: #E8EAF0;
+                --text-sub: #9098A8;
+                --text-muted: #606878;
+                --card-bg: #252830;
+                --card-border: #2E3240;
+                --btn-bg: #252830;
+                --btn-border: #2E3240;
+                --btn-color: #9098A8;
+                --step-bg: #1C1E26;
+                --step-border: #2E3240;
+                --shadow-map: 0 2px 8px rgba(0,0,0,0.5);
+                --shadow-ctrl: 0 -8px 28px rgba(0,0,0,0.4);
+            }
         }
         * { box-sizing: border-box; }
         html, body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             background: var(--bg);
-            color: #333;
+            color: var(--text);
             height: 100%;
             overflow-x: hidden;
             overflow-y: auto;
@@ -39,7 +72,7 @@
             top: 0;
         }
         header h1 { margin: 0; font-size: 1.25rem; color: var(--accent); font-weight: 900; letter-spacing: -0.5px; }
-        header p  { margin: 3px 0 0; font-size: 0.73rem; color: #888; }
+        header p  { margin: 3px 0 0; font-size: 0.73rem; color: var(--text-sub); }
 
         /* 지도 컨테이너 */
         .map-wrap {
@@ -58,13 +91,13 @@
             top: 10px; right: 10px;
             z-index: 120;
             background: var(--white);
-            border: none;
+            border: 1px solid var(--card-border);
             border-radius: 10px;
             padding: 7px 10px;
             font-size: 0.75rem;
             font-weight: 700;
-            color: #444;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            color: var(--text);
+            box-shadow: var(--shadow-map);
             cursor: pointer;
             display: flex; align-items: center; gap: 4px;
             -webkit-tap-highlight-color: transparent;
@@ -87,17 +120,18 @@
             justify-content: space-between;
             padding: env(safe-area-inset-top, 12px) 16px 10px;
             background: var(--white);
+            border-bottom: 1px solid var(--card-border);
             flex-shrink: 0;
         }
         #map-modal-header span { font-size: 0.95rem; font-weight: 800; color: var(--accent); }
         #map-close-btn {
             border: none;
-            background: #F0F5FB;
+            background: var(--card-bg);
             border-radius: 10px;
             padding: 8px 14px;
             font-size: 0.82rem;
             font-weight: 700;
-            color: #555;
+            color: var(--text-sub);
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
@@ -108,23 +142,23 @@
             padding: 14px 15px calc(env(safe-area-inset-bottom, 16px) + 16px);
             border-top-left-radius: 22px;
             border-top-right-radius: 22px;
-            box-shadow: 0 -8px 28px rgba(0,0,0,0.09);
+            box-shadow: var(--shadow-ctrl);
             overflow: visible;
             flex-shrink: 0;
         }
 
         .sec { margin-bottom: 11px; }
-        .sec label { display: block; font-size: 0.73rem; color: #555; font-weight: 700; margin-bottom: 6px; }
+        .sec label { display: block; font-size: 0.73rem; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
         .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
         .sel-btn {
             padding: 9px 2px;
-            border: 2px solid #E1E8F0;
+            border: 2px solid var(--btn-border);
             border-radius: 11px;
-            background: #F5F7FA;
-            color: #666;
+            background: var(--btn-bg);
+            color: var(--btn-color);
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
@@ -133,7 +167,7 @@
             transition: border-color 0.14s, background 0.14s, color 0.14s;
             -webkit-tap-highlight-color: transparent;
         }
-        .sel-btn .sub { display: block; font-size: 0.58rem; font-weight: 500; color: #aaa; margin-top: 1px; }
+        .sel-btn .sub { display: block; font-size: 0.58rem; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
         .sel-btn.active {
             border-color: var(--accent);
             background: var(--accent);
@@ -148,8 +182,8 @@
             gap: 6px;
             margin-bottom: 12px;
         }
-        .card { background: #F0F5FB; padding: 8px 4px; border-radius: 11px; text-align: center; border: 1px solid #E1EAF4; }
-        .card span   { display: block; font-size: 0.58rem; color: #777; margin-bottom: 2px; }
+        .card { background: var(--card-bg); padding: 8px 4px; border-radius: 11px; text-align: center; border: 1px solid var(--card-border); }
+        .card span   { display: block; font-size: 0.58rem; color: var(--text-sub); margin-bottom: 2px; }
         .card strong { font-size: 0.85rem; color: var(--accent); font-weight: 800; }
 
         .btn-row { display: flex; gap: 8px; margin-bottom: 13px; }
@@ -172,11 +206,11 @@
         }
         .rnd-btn:active { transform: scale(0.97); filter: brightness(0.9); }
 
-        .route-section h2 { font-size: 0.84rem; color: #444; margin: 0 0 8px 2px; font-weight: 700; }
+        .route-section h2 { font-size: 0.84rem; color: var(--text); margin: 0 0 8px 2px; font-weight: 700; }
         .step-item {
             display: flex; align-items: center;
             margin-bottom: 6px; padding: 10px 12px;
-            background: #fff; border-radius: 11px; border: 1px solid #EFEFEF;
+            background: var(--step-bg); border-radius: 11px; border: 1px solid var(--step-border);
         }
         .step-circle {
             width: 26px; height: 26px; border-radius: 50%;
@@ -187,28 +221,51 @@
         .c-start { background: #5C6BC0; }
         .c-way   { background: var(--coral); }
         .c-home  { background: #2ECC71; }
-        .step-text { font-size: 0.86rem; font-weight: 600; color: #333; flex: 1; }
+        .step-text { font-size: 0.86rem; font-weight: 600; color: var(--text); flex: 1; }
         .step-badge {
             font-size: 0.6rem; border-radius: 5px; padding: 2px 6px;
             font-weight: 700; flex-shrink: 0;
-            background: #EEF2FF; color: #5C6BC0;
+            background: #1E2140; color: #8899DD;
         }
         .step-badge.coral { background: #FFF0F0; color: var(--coral); }
         .step-badge.green { background: #EAFAF1; color: #27AE60; }
 
+        /* 날씨 바 */
+        #weather-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 7px;
+            padding: 5px 14px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+        #weather-advice {
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            background: #E8F4FD;
+            color: #4A90E2;
+        }
+
         #overlay {
             display: none; position: absolute; inset: 0;
-            background: rgba(248,249,253,0.88); z-index: 200;
+            background: rgba(15,17,23,0.88); z-index: 200;
             align-items: center; justify-content: center; flex-direction: column;
         }
         #overlay.show { display: flex; }
         .spinner {
             width: 36px; height: 36px;
-            border: 4px solid #E1E8F0; border-top-color: var(--accent);
+            border: 4px solid var(--btn-border); border-top-color: var(--accent);
             border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        #overlay p { font-size: 0.82rem; color: #666; font-weight: 600; }
+        #overlay p { font-size: 0.82rem; color: var(--text-sub); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -216,16 +273,10 @@
 <header>
     <h1>🚩 홍장군 전용 산책 케어</h1>
     <p>힐스테이트 청계 정문 출발 · 귀가 고정</p>
-    <div id="weather-bar" style="
-        display:inline-flex; align-items:center; gap:8px;
-        margin-top:7px; padding:5px 14px;
-        background:#F0F5FB; border-radius:20px;
-        font-size:0.78rem; font-weight:600; color:#444;
-        border:1px solid #E1EAF4;
-    ">
+    <div id="weather-bar">
         <span id="weather-icon">⏳</span>
         <span id="weather-text">날씨 불러오는 중...</span>
-        <span id="weather-advice" style="font-size:0.68rem;padding:2px 8px;border-radius:10px;font-weight:700;background:#E8F4FD;color:#4A90E2;"></span>
+        <span id="weather-advice"></span>
     </div>
 </header>
 
@@ -570,13 +621,14 @@ function loadWeather() {
     }
 
     function getAdvice(temp, code, wind) {
-        if (code >= 80)   return { text: '산책 비추 🚫', color: '#FFE0E0', tcolor: '#E74C3C' };
-        if (code >= 60)   return { text: '우산 필요 ☂️', color: '#FFF3CD', tcolor: '#E67E22' };
-        if (temp >= 33)   return { text: '더위 주의 🥵', color: '#FFE0E0', tcolor: '#E74C3C' };
-        if (temp <= 0)    return { text: '방한 필수 🧣', color: '#E8F4FD', tcolor: '#2980B9' };
-        if (temp <= 10)   return { text: '쌀쌀해요 🧥',  color: '#E8F4FD', tcolor: '#2980B9' };
-        if (wind >= 30)   return { text: '바람 강함 💨', color: '#FFF3CD', tcolor: '#E67E22' };
-        return { text: '산책 최적 ✅', color: '#EAFAF1', tcolor: '#27AE60' };
+        const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (code >= 80)   return { text: '산책 비추 🚫', color: dark ? '#3D1A1A' : '#FFE0E0', tcolor: '#E74C3C' };
+        if (code >= 60)   return { text: '우산 필요 ☂️', color: dark ? '#2D2510' : '#FFF3CD', tcolor: '#E67E22' };
+        if (temp >= 33)   return { text: '더위 주의 🥵', color: dark ? '#3D1A1A' : '#FFE0E0', tcolor: '#E74C3C' };
+        if (temp <= 0)    return { text: '방한 필수 🧣', color: dark ? '#0D1E30' : '#E8F4FD', tcolor: '#5BA3F5' };
+        if (temp <= 10)   return { text: '쌀쌀해요 🧥',  color: dark ? '#0D1E30' : '#E8F4FD', tcolor: '#5BA3F5' };
+        if (wind >= 30)   return { text: '바람 강함 💨', color: dark ? '#2D2510' : '#FFF3CD', tcolor: '#E67E22' };
+        return { text: '산책 최적 ✅', color: dark ? '#0D2418' : '#EAFAF1', tcolor: '#27AE60' };
     }
 
     fetch(url)
