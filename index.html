@@ -175,6 +175,21 @@
 <header>
     <h1>🚩 홍장군 전용 산책 케어</h1>
     <p>힐스테이트 청계 정문 출발 · 귀가 고정</p>
+    <div id="weather-bar" style="
+        display:inline-flex; align-items:center; gap:8px;
+        margin-top:7px; padding:5px 14px;
+        background:#F0F5FB; border-radius:20px;
+        font-size:0.78rem; font-weight:600; color:#444;
+        border:1px solid #E1EAF4;
+    ">
+        <span id="weather-icon">⏳</span>
+        <span id="weather-text">날씨 불러오는 중...</span>
+        <span id="weather-advice" style="
+            font-size:0.68rem; padding:2px 8px;
+            border-radius:10px; font-weight:700;
+            background:#E8F4FD; color:#4A90E2;
+        "></span>
+    </div>
 </header>
 
 <div id="map"></div>
@@ -208,11 +223,12 @@
     </div>
 
     <!-- 대시보드 -->
-    <div class="dash">
+    <div class="dash" style="grid-template-columns:repeat(5,1fr);">
         <div class="card"><span>⏱️ 시간</span><strong id="dsh-time">60분</strong></div>
         <div class="card"><span>🎯 목표거리</span><strong id="dsh-target">-km</strong></div>
         <div class="card"><span>📏 실제거리</span><strong id="dsh-real">-km</strong></div>
         <div class="card"><span>⚡ 속도</span><strong id="dsh-speed">4.0</strong></div>
+        <div class="card"><span>🔥 칼로리</span><strong id="dsh-cal">-kcal</strong></div>
     </div>
 
     <button class="gen-btn" onclick="generateRandomCourse()">🐾 오늘의 홍장군 코스 생성</button>
@@ -248,6 +264,14 @@ function selectSpeed(spd) {
 }
 
 /* 시간·속도 변경 시 대시보드와 버튼 서브텍스트 갱신 */
+var WEIGHT = 50; /* 홍장군 보호자 체중 (kg) */
+var MET_TABLE = { 2.5: 2.5, 4.0: 3.5, 5.5: 5.0 }; /* 속도별 MET 값 */
+
+function calcCalorie(spd, min) {
+    var met = MET_TABLE[spd] || 3.5;
+    return Math.round(met * WEIGHT * (min / 60));
+}
+
 function refresh() {
     var targetKm = selSpd * selMin / 60;
     document.getElementById('dsh-target').innerText = targetKm.toFixed(1) + 'km';
@@ -255,6 +279,8 @@ function refresh() {
         var el = document.getElementById('sub-' + m);
         if (el) el.innerText = '~' + (selSpd * m / 60).toFixed(1) + 'km';
     });
+    /* 칼로리 업데이트 */
+    document.getElementById('dsh-cal').innerText = calcCalorie(selSpd, selMin) + 'kcal';
     generateRandomCourse(); /* 버튼 누를 때마다 무조건 코스 재생성 */
 }
 
@@ -327,6 +353,7 @@ function initMap() {
     mapReady = true;
     document.getElementById('overlay').classList.remove('show');
     refresh();
+    loadWeather();
 }
 
 /* ── 코스 생성 ── */
@@ -366,6 +393,10 @@ function generateRandomCourse() {
         }
     });
     document.getElementById('dsh-real').innerText = realKm.toFixed(1) + 'km';
+
+    /* 실제 거리 기반 칼로리 재계산 (MET × 체중 × 실제시간) */
+    var realMin = realKm / selSpd * 60;
+    document.getElementById('dsh-cal').innerText = calcCalorie(selSpd, realMin) + 'kcal';
 
     var bounds = new kakao.maps.LatLngBounds();
     path.forEach(function(p) { bounds.extend(p); });
@@ -418,6 +449,70 @@ function addStep(num, name, circleClass, badgeText, badgeStyle) {
     div.innerHTML = '<div class="step-circle ' + circleClass + '">' + num + '</div>'
         + '<div class="step-text">' + name + '</div>' + bh;
     list.appendChild(div);
+}
+
+/* ── 날씨 연동 (Open-Meteo, 키 불필요) ── */
+function loadWeather() {
+    var lat = START.lat, lng = START.lng;
+
+    /* WMO 날씨 코드 → 이모지 + 설명 */
+    function decodeWMO(code) {
+        if (code === 0)            return { icon: '☀️',  text: '맑음' };
+        if (code <= 2)             return { icon: '🌤️',  text: '구름 조금' };
+        if (code === 3)            return { icon: '☁️',  text: '흐림' };
+        if (code <= 49)            return { icon: '🌫️',  text: '안개' };
+        if (code <= 59)            return { icon: '🌦️',  text: '이슬비' };
+        if (code <= 69)            return { icon: '🌧️',  text: '비' };
+        if (code <= 79)            return { icon: '❄️',  text: '눈' };
+        if (code <= 84)            return { icon: '🌧️',  text: '소나기' };
+        if (code <= 99)            return { icon: '⛈️',  text: '뇌우' };
+        return { icon: '🌡️', text: '알 수 없음' };
+    }
+
+    /* 산책 적합도 판단 */
+    function getAdvice(temp, code, windspeed) {
+        if (code >= 80)  return { text: '산책 비추 🚫', color: '#FFE0E0', tcolor: '#E74C3C' };
+        if (code >= 60)  return { text: '우산 필요 ☂️', color: '#FFF3CD', tcolor: '#E67E22' };
+        if (temp >= 33)  return { text: '더위 주의 🥵', color: '#FFE0E0', tcolor: '#E74C3C' };
+        if (temp <= 0)   return { text: '방한 필수 🧣', color: '#E8F4FD', tcolor: '#2980B9' };
+        if (temp <= 10)  return { text: '쌀쌀해요 🧥', color: '#E8F4FD', tcolor: '#2980B9' };
+        if (windspeed >= 30) return { text: '바람 강함 💨', color: '#FFF3CD', tcolor: '#E67E22' };
+        return { text: '산책 최적 ✅', color: '#EAFAF1', tcolor: '#27AE60' };
+    }
+
+    var url = 'https://api.open-meteo.com/v1/forecast'
+        + '?latitude=' + lat
+        + '&longitude=' + lng
+        + '&current=temperature_2m,weathercode,windspeed_10m'
+        + '&timezone=Asia%2FSeoul';
+
+    fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var cur   = data.current;
+            var temp  = Math.round(cur.temperature_2m);
+            var code  = cur.weathercode;
+            var wind  = Math.round(cur.windspeed_10m);
+            var wmo   = decodeWMO(code);
+            var adv   = getAdvice(temp, code, wind);
+
+            document.getElementById('weather-icon').innerText = wmo.icon;
+            document.getElementById('weather-text').innerText =
+                wmo.text + ' ' + temp + '°C · 바람 ' + wind + 'km/h';
+
+            var advEl = document.getElementById('weather-advice');
+            advEl.innerText = adv.text;
+            advEl.style.background = adv.color;
+            advEl.style.color = adv.tcolor;
+
+            /* 날씨 바 배경도 적합도에 맞게 */
+            document.getElementById('weather-bar').style.background = adv.color;
+            document.getElementById('weather-bar').style.borderColor = adv.tcolor + '44';
+        })
+        .catch(function() {
+            document.getElementById('weather-text').innerText = '날씨 정보 없음';
+            document.getElementById('weather-icon').innerText = '🌡️';
+        });
 }
 
 /* ── SDK 로드 ── */
