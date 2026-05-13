@@ -444,28 +444,45 @@ function generateRandomCourse() {
     document.getElementById('dsh-real').innerText = realKm.toFixed(1) + 'km';
     document.getElementById('dsh-cal').innerText  = calcCalorie(selSpd, realKm / selSpd * 60) + 'kcal';
 
-    /* 폴리라인 먼저 그리기 */
-    lastPath = path;
-    polyline = new kakao.maps.Polyline({
-        path, strokeWeight: 7,
-        strokeColor: '#4A90E2', strokeOpacity: 0.85, strokeStyle: 'solid'
-    });
-    polyline.setMap(map);
-
-    /* 중심·줌 직접 계산 (setBounds 대신) */
+    /* 중심·줌 계산 */
     let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
     path.forEach(p => {
         const la = p.getLat(), lo = p.getLng();
         if (la < minLat) minLat = la; if (la > maxLat) maxLat = la;
         if (lo < minLng) minLng = lo; if (lo > maxLng) maxLng = lo;
     });
-    const span  = Math.max((maxLat - minLat) / LAT_PER_KM, (maxLng - minLng) / LNG_PER_KM);
-    const level = span < 0.8 ? 4 : span < 1.5 ? 5 : span < 3 ? 6 : span < 6 ? 7 : 8;
-    map.setLevel(level);
-    map.setCenter(new kakao.maps.LatLng((minLat + maxLat) / 2, (minLng + maxLng) / 2));
+    const span   = Math.max((maxLat - minLat) / LAT_PER_KM, (maxLng - minLng) / LNG_PER_KM);
+    const level  = span < 0.8 ? 4 : span < 1.5 ? 5 : span < 3 ? 6 : span < 6 ? 7 : 8;
+    const center = new kakao.maps.LatLng((minLat + maxLat) / 2, (minLng + maxLng) / 2);
 
-    /* 지도 이동 후 폴리라인 재확인 */
-    setTimeout(() => { if (polyline) polyline.setMap(map); }, 300);
+    /* setLevel + setCenter 를 한 번에 처리 → iOS 이중 애니메이션 방지 */
+    map.setLevel(level, { animate: false });
+    map.setCenter(center);
+
+    /* 폴리라인: 지도 정착 후 그리기
+       idle = 지도 이동·줌 완전히 끝난 시점 (iOS 포함 가장 안정적)
+       + setTimeout 이중 보험으로 idle 누락 케이스 대응 */
+    lastPath = path;
+    let drawn = false;
+
+    function drawPolyline() {
+        if (drawn) return;
+        drawn = true;
+        if (polyline) polyline.setMap(null);
+        polyline = new kakao.maps.Polyline({
+            path, strokeWeight: 7,
+            strokeColor: '#4A90E2', strokeOpacity: 0.85, strokeStyle: 'solid'
+        });
+        polyline.setMap(map);
+    }
+
+    kakao.maps.event.addListener(map, 'idle', function onIdle() {
+        kakao.maps.event.removeListener(map, 'idle', onIdle);
+        drawPolyline();
+    });
+
+    /* idle 가 500ms 내 안 오면 강제 실행 */
+    setTimeout(drawPolyline, 500);
 }
 
 /* ── 오버레이 추가 ── */
