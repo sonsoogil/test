@@ -17,7 +17,6 @@
             margin: 0;
             background: var(--bg);
             color: #333;
-            /* 아이폰 크롬 스크롤 정상화 */
             height: 100%;
             overflow-x: hidden;
             overflow-y: auto;
@@ -90,11 +89,7 @@
             background: var(--white);
             flex-shrink: 0;
         }
-        #map-modal-header span {
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
+        #map-modal-header span { font-size: 0.95rem; font-weight: 800; color: var(--accent); }
         #map-close-btn {
             border: none;
             background: #F0F5FB;
@@ -114,23 +109,14 @@
             border-top-left-radius: 22px;
             border-top-right-radius: 22px;
             box-shadow: 0 -8px 28px rgba(0,0,0,0.09);
-            /* 스크롤 제거 - body가 스크롤 담당 */
             overflow: visible;
             flex-shrink: 0;
         }
 
         .sec { margin-bottom: 11px; }
-        .sec label {
-            display: block;
-            font-size: 0.73rem;
-            color: #555;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
+        .sec label { display: block; font-size: 0.73rem; color: #555; font-weight: 700; margin-bottom: 6px; }
 
-        /* 시간 버튼: 5개 */
         .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        /* 속도 버튼: 3개 */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
         .sel-btn {
@@ -144,16 +130,10 @@
             cursor: pointer;
             text-align: center;
             line-height: 1.25;
-            transition: all 0.14s;
+            transition: border-color 0.14s, background 0.14s, color 0.14s;
             -webkit-tap-highlight-color: transparent;
         }
-        .sel-btn .sub {
-            display: block;
-            font-size: 0.58rem;
-            font-weight: 500;
-            color: #aaa;
-            margin-top: 1px;
-        }
+        .sel-btn .sub { display: block; font-size: 0.58rem; font-weight: 500; color: #aaa; margin-top: 1px; }
         .sel-btn.active {
             border-color: var(--accent);
             background: var(--accent);
@@ -162,75 +142,44 @@
         }
         .sel-btn.active .sub { color: rgba(255,255,255,0.8); }
 
-        /* 대시보드 */
         .dash {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 6px;
             margin-bottom: 12px;
         }
-        .card {
-            background: #F0F5FB;
-            padding: 8px 4px;
-            border-radius: 11px;
-            text-align: center;
-            border: 1px solid #E1EAF4;
-        }
+        .card { background: #F0F5FB; padding: 8px 4px; border-radius: 11px; text-align: center; border: 1px solid #E1EAF4; }
         .card span   { display: block; font-size: 0.58rem; color: #777; margin-bottom: 2px; }
         .card strong { font-size: 0.85rem; color: var(--accent); font-weight: 800; }
 
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 13px;
-        }
+        .btn-row { display: flex; gap: 8px; margin-bottom: 13px; }
         .gen-btn {
-            flex: 1;
-            padding: 14px 8px;
-            border: none;
-            border-radius: 13px;
+            flex: 1; padding: 14px 8px; border: none; border-radius: 13px;
             background: linear-gradient(135deg, #4A90E2, #357ABD);
-            color: #fff;
-            font-size: 0.88rem;
-            font-weight: 800;
+            color: #fff; font-size: 0.88rem; font-weight: 800;
             box-shadow: 0 5px 16px rgba(74,144,226,0.33);
-            cursor: pointer;
-            transition: all 0.18s;
-            -webkit-tap-highlight-color: transparent;
-            line-height: 1.3;
+            cursor: pointer; transition: transform 0.18s, filter 0.18s;
+            -webkit-tap-highlight-color: transparent; line-height: 1.3;
         }
         .gen-btn:active { transform: scale(0.97); filter: brightness(0.9); }
         .rnd-btn {
-            flex: 1;
-            padding: 14px 8px;
-            border: none;
-            border-radius: 13px;
+            flex: 1; padding: 14px 8px; border: none; border-radius: 13px;
             background: linear-gradient(135deg, #FF6B6B, #E74C3C);
-            color: #fff;
-            font-size: 0.88rem;
-            font-weight: 800;
+            color: #fff; font-size: 0.88rem; font-weight: 800;
             box-shadow: 0 5px 16px rgba(255,107,107,0.33);
-            cursor: pointer;
-            transition: all 0.18s;
-            -webkit-tap-highlight-color: transparent;
-            line-height: 1.3;
+            cursor: pointer; transition: transform 0.18s, filter 0.18s;
+            -webkit-tap-highlight-color: transparent; line-height: 1.3;
         }
         .rnd-btn:active { transform: scale(0.97); filter: brightness(0.9); }
 
         .route-section h2 { font-size: 0.84rem; color: #444; margin: 0 0 8px 2px; font-weight: 700; }
-
         .step-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
-            padding: 10px 12px;
-            background: #fff;
-            border-radius: 11px;
-            border: 1px solid #EFEFEF;
+            display: flex; align-items: center;
+            margin-bottom: 6px; padding: 10px 12px;
+            background: #fff; border-radius: 11px; border: 1px solid #EFEFEF;
         }
         .step-circle {
-            width: 26px; height: 26px;
-            border-radius: 50%;
+            width: 26px; height: 26px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.65rem; font-weight: 800; color: #fff;
             margin-right: 10px; flex-shrink: 0;
@@ -238,20 +187,19 @@
         .c-start { background: #5C6BC0; }
         .c-way   { background: var(--coral); }
         .c-home  { background: #2ECC71; }
-
         .step-text { font-size: 0.86rem; font-weight: 600; color: #333; flex: 1; }
         .step-badge {
-            font-size: 0.6rem; border-radius: 5px;
-            padding: 2px 6px; font-weight: 700; flex-shrink: 0;
+            font-size: 0.6rem; border-radius: 5px; padding: 2px 6px;
+            font-weight: 700; flex-shrink: 0;
             background: #EEF2FF; color: #5C6BC0;
         }
         .step-badge.coral { background: #FFF0F0; color: var(--coral); }
         .step-badge.green { background: #EAFAF1; color: #27AE60; }
 
         #overlay {
-            display: none; position: absolute;
-            inset: 0; background: rgba(248,249,253,0.88);
-            z-index: 200; align-items: center; justify-content: center; flex-direction: column;
+            display: none; position: absolute; inset: 0;
+            background: rgba(248,249,253,0.88); z-index: 200;
+            align-items: center; justify-content: center; flex-direction: column;
         }
         #overlay.show { display: flex; }
         .spinner {
@@ -277,11 +225,7 @@
     ">
         <span id="weather-icon">⏳</span>
         <span id="weather-text">날씨 불러오는 중...</span>
-        <span id="weather-advice" style="
-            font-size:0.68rem; padding:2px 8px;
-            border-radius:10px; font-weight:700;
-            background:#E8F4FD; color:#4A90E2;
-        "></span>
+        <span id="weather-advice" style="font-size:0.68rem;padding:2px 8px;border-radius:10px;font-weight:700;background:#E8F4FD;color:#4A90E2;"></span>
     </div>
 </header>
 
@@ -294,7 +238,6 @@
     <button id="map-expand-btn" onclick="openMapModal()">🗺️ 크게 보기</button>
 </div>
 
-<!-- 지도 전체보기 모달 -->
 <div id="map-modal">
     <div id="map-modal-header">
         <span>🚩 홍장군 산책 코스</span>
@@ -304,20 +247,17 @@
 </div>
 
 <div class="controls">
-
-    <!-- 산책 시간 -->
     <div class="sec">
         <label>⏰ 산책 시간</label>
         <div class="grid-5">
             <button class="sel-btn time-btn" data-min="30"  onclick="selectTime(30)">30분<span class="sub" id="sub-30">-</span></button>
             <button class="sel-btn time-btn" data-min="45"  onclick="selectTime(45)">45분<span class="sub" id="sub-45">-</span></button>
-            <button class="sel-btn time-btn active" data-min="60"  onclick="selectTime(60)">60분<span class="sub" id="sub-60">-</span></button>
+            <button class="sel-btn time-btn active" data-min="60" onclick="selectTime(60)">60분<span class="sub" id="sub-60">-</span></button>
             <button class="sel-btn time-btn" data-min="75"  onclick="selectTime(75)">75분<span class="sub" id="sub-75">-</span></button>
             <button class="sel-btn time-btn" data-min="90"  onclick="selectTime(90)">90분<span class="sub" id="sub-90">-</span></button>
         </div>
     </div>
 
-    <!-- 👟 걸음 속도 -->
     <div class="sec">
         <label>👟 걸음 속도</label>
         <div class="grid-3">
@@ -327,8 +267,7 @@
         </div>
     </div>
 
-    <!-- 대시보드 -->
-    <div class="dash" style="grid-template-columns:repeat(5,1fr);">
+    <div class="dash">
         <div class="card"><span>⏱️ 시간</span><strong id="dsh-time">60분</strong></div>
         <div class="card"><span>🎯 목표거리</span><strong id="dsh-target">-km</strong></div>
         <div class="card"><span>📏 실제거리</span><strong id="dsh-real">-km</strong></div>
@@ -345,150 +284,113 @@
         <h2>📋 상세 이동 가이드</h2>
         <div id="route-steps"></div>
     </div>
-
 </div>
 
 <script>
-/* ── 출발지 ── */
-const START = { lat: 37.57152873927553, lng: 127.04760981436473, name: "힐스테이트 청계" };
+'use strict';
 
-/* 경유지 풀 없음 - 목표거리 기반 수학적 랜덤 좌표 생성 */
+/* ── 상수 ── */
+const START    = { lat: 37.57152873927553, lng: 127.04760981436473, name: '힐스테이트 청계' };
+const TIMES    = [30, 45, 60, 75, 90];
+const SPEEDS   = [2.5, 4.0, 5.5];
+const WEIGHT   = 50;                          /* 보호자 체중 kg */
+const MET      = { 2.5: 2.5, 4.0: 3.5, 5.5: 5.0 }; /* 속도 → MET */
+const LAT_PER_KM = 0.009;
+const LNG_PER_KM = 0.01125;                  /* 서울 위도 37.5° 기준 */
+const DIRS     = ['북','북동','동','남동','남','남서','서','북서'];
 
-let map, polyline, overlays = [];
+/* ── 상태 ── */
+let map, polyline, mapFull = null, polylineFull = null;
+let overlays = [], overlaysFull = [], lastOverlayData = [], lastPath = [];
 let selMin = 60, selSpd = 4.0, mapReady = false;
+
+/* ── 유틸 ── */
+function haversine(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2
+            + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function calcCalorie(spd, min) {
+    const met = MET[String(spd)] || MET[spd] || 3.5;  /* 문자열/숫자 키 모두 대응 */
+    return Math.round(met * WEIGHT * (min / 60));
+}
+
+/* ── UI 공통 업데이트 ── */
+function updateUI() {
+    const targetKm = selSpd * selMin / 60;
+    document.getElementById('dsh-time').innerText   = selMin + '분';
+    document.getElementById('dsh-speed').innerText  = selSpd.toFixed(1);
+    document.getElementById('dsh-target').innerText = targetKm.toFixed(1) + 'km';
+    document.getElementById('dsh-cal').innerText    = calcCalorie(selSpd, selMin) + 'kcal';
+    TIMES.forEach(m => {
+        const el = document.getElementById('sub-' + m);
+        if (el) el.innerText = '~' + (selSpd * m / 60).toFixed(1) + 'km';
+    });
+}
 
 /* ── 선택 핸들러 ── */
 function selectTime(min) {
     selMin = min;
     document.querySelectorAll('.time-btn').forEach(b => b.classList.toggle('active', +b.dataset.min === min));
-    document.getElementById('dsh-time').innerText = min + '분';
-    refresh();
-}
-function selectSpeed(spd) {
-    selSpd = spd;
-    document.querySelectorAll('.speed-btn').forEach(b => b.classList.toggle('active', +b.dataset.speed === spd));
-    document.getElementById('dsh-speed').innerText = spd.toFixed(1);
-    refresh();
-}
-
-/* 시간·속도 변경 시 대시보드와 버튼 서브텍스트 갱신 */
-var WEIGHT = 50; /* 홍장군 보호자 체중 (kg) */
-var MET_TABLE = { 2.5: 2.5, 4.0: 3.5, 5.5: 5.0 }; /* 속도별 MET 값 */
-
-function calcCalorie(spd, min) {
-    var met = MET_TABLE[spd] || 3.5;
-    return Math.round(met * WEIGHT * (min / 60));
-}
-
-function refresh() {
-    var targetKm = selSpd * selMin / 60;
-    document.getElementById('dsh-target').innerText = targetKm.toFixed(1) + 'km';
-    [30,45,60,75,90].forEach(function(m) {
-        var el = document.getElementById('sub-' + m);
-        if (el) el.innerText = '~' + (selSpd * m / 60).toFixed(1) + 'km';
-    });
-    /* 칼로리 업데이트 */
-    document.getElementById('dsh-cal').innerText = calcCalorie(selSpd, selMin) + 'kcal';
-    generateRandomCourse(); /* 버튼 누를 때마다 무조건 코스 재생성 */
-}
-
-/* ── 완전 랜덤 코스 생성 ── */
-function generateFullRandom() {
-    var times  = [30, 45, 60, 75, 90];
-    var speeds = [2.5, 4.0, 5.5];
-
-    /* 현재 선택값과 다른 값이 나오도록 반복 */
-    var newMin, newSpd, tries = 0;
-    do {
-        newMin = times[Math.floor(Math.random() * times.length)];
-        newSpd = speeds[Math.floor(Math.random() * speeds.length)];
-        tries++;
-    } while (newMin === selMin && newSpd === selSpd && tries < 10);
-
-    /* 시간 버튼 UI 업데이트 */
-    selMin = newMin;
-    document.querySelectorAll('.time-btn').forEach(function(b) {
-        b.classList.toggle('active', +b.dataset.min === newMin);
-    });
-    document.getElementById('dsh-time').innerText = newMin + '분';
-
-    /* 속도 버튼 UI 업데이트 */
-    selSpd = newSpd;
-    document.querySelectorAll('.speed-btn').forEach(function(b) {
-        b.classList.toggle('active', +b.dataset.speed === newSpd);
-    });
-    document.getElementById('dsh-speed').innerText = newSpd.toFixed(1);
-
-    /* 칼로리·거리 라벨 갱신 후 코스 생성 */
-    var targetKm = newSpd * newMin / 60;
-    document.getElementById('dsh-target').innerText = targetKm.toFixed(1) + 'km';
-    document.getElementById('dsh-cal').innerText = calcCalorie(newSpd, newMin) + 'kcal';
-    [30,45,60,75,90].forEach(function(m) {
-        var el = document.getElementById('sub-' + m);
-        if (el) el.innerText = '~' + (newSpd * m / 60).toFixed(1) + 'km';
-    });
-
+    updateUI();
     generateRandomCourse();
 }
 
-/* ── 목표 거리에 맞는 경유지 선택 ──
-   목표거리 = speed × time
-   경유지를 하나씩 추가할 때마다 "출발→경유지→...→출발" 총 직선 거리 합산.
-   총합이 목표거리를 넘지 않는 범위에서 최대한 채움.
-*/
-function pickWaypoints(targetKm) {
-    /* 경유지 풀 없이 수학적으로 랜덤 좌표 생성
-       - 경유지 수: targetKm < 2.5 → 1개, 이상 → 2개
-       - 각 경유지는 출발지로부터 idealDist 반경에 랜덤 방향각으로 배치
-       - 방향각은 이전 경유지와 최소 60° 이상 차이나도록 강제 (겹침 방지)
-       - 1km당 위도 ≈ 0.009°, 경도 ≈ 0.01125° (서울 기준) */
-    var maxWp = targetKm < 2.5 ? 1 : 2;
-    var idealDist = targetKm / (maxWp + 1);
-
-    var LAT_PER_KM = 0.009;       /* 위도 1km */
-    var LNG_PER_KM = 0.01125;     /* 경도 1km (서울 위도 37.5° 기준) */
-
-    var chosen = [];
-    var usedAngles = [];
-
-    for (var i = 0; i < maxWp; i++) {
-        var angle, tries = 0;
-        /* 이전 경유지 방향과 60° 이상 차이나는 각도 선택 */
-        do {
-            angle = Math.random() * 360;
-            var ok = usedAngles.every(function(a) {
-                var diff = Math.abs(angle - a) % 360;
-                return Math.min(diff, 360 - diff) >= 60;
-            });
-            tries++;
-        } while (!ok && tries < 30);
-        usedAngles.push(angle);
-
-        /* 이상거리에서 ±15% 랜덤 변동 추가 */
-        var r = idealDist * (0.85 + Math.random() * 0.3);
-        var rad = angle * Math.PI / 180;
-
-        var lat = START.lat + Math.cos(rad) * r * LAT_PER_KM;
-        var lng = START.lng + Math.sin(rad) * r * LNG_PER_KM;
-
-        /* 방향각 → 방위 이름 */
-        var dirs = ["북","북동","동","남동","남","남서","서","북서"];
-        var dirName = dirs[Math.round(((angle % 360) + 360) % 360 / 45) % 8];
-        var distStr = r.toFixed(1);
-        chosen.push({ lat: lat, lng: lng, name: dirName + " 방향 " + distStr + "km 지점", tag: "산책" });
-    }
-    return chosen;
+function selectSpeed(spd) {
+    selSpd = spd;
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.toggle('active', +b.dataset.speed === spd));
+    updateUI();
+    generateRandomCourse();
 }
 
-/* Haversine 거리 (km) */
-function haversine(lat1, lng1, lat2, lng2) {
-    var R = 6371;
-    var dLat = (lat2 - lat1) * Math.PI / 180;
-    var dLng = (lng2 - lng1) * Math.PI / 180;
-    var a = Math.sin(dLat/2)*Math.sin(dLat/2)
-          + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)
-          * Math.sin(dLng/2)*Math.sin(dLng/2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+/* ── 완전 랜덤 코스 ── */
+function generateFullRandom() {
+    let newMin, newSpd, tries = 0;
+    do {
+        newMin = TIMES[Math.floor(Math.random() * TIMES.length)];
+        newSpd = SPEEDS[Math.floor(Math.random() * SPEEDS.length)];
+        tries++;
+    } while (newMin === selMin && newSpd === selSpd && tries < 10);
+
+    selMin = newMin;
+    selSpd = newSpd;
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.toggle('active', +b.dataset.min === newMin));
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.toggle('active', +b.dataset.speed === newSpd));
+    updateUI();
+    generateRandomCourse();
+}
+
+/* ── 경유지 생성 (수학적 랜덤) ── */
+function pickWaypoints(targetKm) {
+    const maxWp     = targetKm < 2.5 ? 1 : 2;
+    const idealDist = targetKm / (maxWp + 1);
+    const chosen    = [];
+    const usedAngles = [];
+
+    for (let i = 0; i < maxWp; i++) {
+        let angle, tries = 0;
+        do {
+            angle = Math.random() * 360;
+            const ok = usedAngles.every(a => {
+                const diff = Math.abs(angle - a) % 360;
+                return Math.min(diff, 360 - diff) >= 60;
+            });
+            if (ok) break;
+        } while (++tries < 30);
+        usedAngles.push(angle);
+
+        const r   = idealDist * (0.85 + Math.random() * 0.3);
+        const rad = angle * Math.PI / 180;
+        const lat = START.lat + Math.cos(rad) * r * LAT_PER_KM;
+        const lng = START.lng + Math.sin(rad) * r * LNG_PER_KM;
+        const dir = DIRS[Math.round(((angle % 360) + 360) % 360 / 45) % 8];
+        chosen.push({ lat, lng, name: `${dir} 방향 ${r.toFixed(1)}km 지점`, tag: '산책' });
+    }
+    return chosen;
 }
 
 /* ── 지도 초기화 ── */
@@ -499,7 +401,8 @@ function initMap() {
     });
     mapReady = true;
     document.getElementById('overlay').classList.remove('show');
-    refresh();
+    updateUI();
+    generateRandomCourse();
     loadWeather();
 }
 
@@ -507,110 +410,91 @@ function initMap() {
 function generateRandomCourse() {
     if (!mapReady) return;
 
+    /* 기존 요소 정리 */
     if (polyline) polyline.setMap(null);
-    overlays.forEach(function(o) { o.setMap(null); });
-    overlays = [];
-    lastOverlayData = []; /* 모달 오버레이 초기화 */
+    overlays.forEach(o => o.setMap(null));
+    overlays        = [];
+    lastOverlayData = [];
     document.getElementById('route-steps').innerHTML = '';
 
-    var targetKm = selSpd * selMin / 60;
-    var selected = pickWaypoints(targetKm);
-
-    var startLL = new kakao.maps.LatLng(START.lat, START.lng);
-    var path = [startLL];
+    const targetKm = selSpd * selMin / 60;
+    const selected = pickWaypoints(targetKm);
+    const startLL  = new kakao.maps.LatLng(START.lat, START.lng);
+    const path     = [startLL];
 
     addOverlay(startLL, '출', '#5C6BC0');
     addStep('출', START.name + ' (출발)', 'c-start', '출발', '');
 
-    selected.forEach(function(pt, i) {
-        var pos = new kakao.maps.LatLng(pt.lat, pt.lng);
+    selected.forEach((pt, i) => {
+        const pos = new kakao.maps.LatLng(pt.lat, pt.lng);
         path.push(pos);
-        addOverlay(pos, String(i+1), '#FF6B6B');
-        addStep(String(i+1), pt.name, 'c-way', pt.tag, 'coral');
+        addOverlay(pos, String(i + 1), '#FF6B6B');
+        addStep(String(i + 1), pt.name, 'c-way', pt.tag, 'coral');
     });
 
     path.push(startLL);
     addOverlay(new kakao.maps.LatLng(START.lat - 0.0002, START.lng + 0.0002), '귀', '#2ECC71');
     addStep('귀', START.name + ' (귀가)', 'c-home', '도착', 'green');
 
-    var realKm = 0;
-    path.forEach(function(p, i) {
-        if (i > 0) {
-            var prev = path[i-1];
-            realKm += haversine(prev.getLat(), prev.getLng(), p.getLat(), p.getLng());
-        }
-    });
+    /* 실제 거리 계산 */
+    const realKm = path.reduce((sum, p, i) => {
+        if (i === 0) return sum;
+        return sum + haversine(path[i-1].getLat(), path[i-1].getLng(), p.getLat(), p.getLng());
+    }, 0);
     document.getElementById('dsh-real').innerText = realKm.toFixed(1) + 'km';
+    document.getElementById('dsh-cal').innerText  = calcCalorie(selSpd, realKm / selSpd * 60) + 'kcal';
 
-    /* 실제 거리 기반 칼로리 재계산 (MET × 체중 × 실제시간) */
-    var realMin = realKm / selSpd * 60;
-    document.getElementById('dsh-cal').innerText = calcCalorie(selSpd, realMin) + 'kcal';
-
-    var bounds = new kakao.maps.LatLngBounds();
-    path.forEach(function(p) { bounds.extend(p); });
-
-    /* 폴리라인 먼저 즉시 그리기 */
-    lastPath = path; /* 모달 동기화용 저장 */
+    /* 폴리라인 먼저 그리기 */
+    lastPath = path;
     polyline = new kakao.maps.Polyline({
-        path: path, strokeWeight: 7,
+        path, strokeWeight: 7,
         strokeColor: '#4A90E2', strokeOpacity: 0.85, strokeStyle: 'solid'
     });
     polyline.setMap(map);
 
-    /* 중심점·줌 계산 후 지도 이동 (setBounds 대신 직접 설정) */
-    var minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
-    path.forEach(function(p) {
-        var la = p.getLat(), lo = p.getLng();
+    /* 중심·줌 직접 계산 (setBounds 대신) */
+    let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
+    path.forEach(p => {
+        const la = p.getLat(), lo = p.getLng();
         if (la < minLat) minLat = la; if (la > maxLat) maxLat = la;
         if (lo < minLng) minLng = lo; if (lo > maxLng) maxLng = lo;
     });
-    var centerLat = (minLat + maxLat) / 2;
-    var centerLng = (minLng + maxLng) / 2;
-    var spanLat = maxLat - minLat;
-    var spanLng = maxLng - minLng;
-    var span = Math.max(spanLat / 0.009, spanLng / 0.01125); /* km 단위 */
-    var level = span < 0.8 ? 4 : span < 1.5 ? 5 : span < 3 ? 6 : span < 6 ? 7 : 8;
+    const span  = Math.max((maxLat - minLat) / LAT_PER_KM, (maxLng - minLng) / LNG_PER_KM);
+    const level = span < 0.8 ? 4 : span < 1.5 ? 5 : span < 3 ? 6 : span < 6 ? 7 : 8;
     map.setLevel(level);
-    map.setCenter(new kakao.maps.LatLng(centerLat, centerLng));
+    map.setCenter(new kakao.maps.LatLng((minLat + maxLat) / 2, (minLng + maxLng) / 2));
 
-    /* 폴리라인 재확인: 지도 이동 후에도 유지되도록 추가 보장 */
-    setTimeout(function() {
-        if (polyline) polyline.setMap(map);
-    }, 300);
+    /* 지도 이동 후 폴리라인 재확인 */
+    setTimeout(() => { if (polyline) polyline.setMap(map); }, 300);
 }
 
+/* ── 오버레이 추가 ── */
 function addOverlay(pos, label, color) {
-    var content = '<div style="background:' + color + ';color:#fff;border-radius:50%;'
-        + 'width:30px;height:30px;display:flex;align-items:center;justify-content:center;'
-        + 'font-size:11px;font-weight:800;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.22);">'
-        + label + '</div>';
-    var o = new kakao.maps.CustomOverlay({ position: pos, content: content, yAnchor: 0.5 });
+    const content = `<div style="background:${color};color:#fff;border-radius:50%;`
+        + `width:30px;height:30px;display:flex;align-items:center;justify-content:center;`
+        + `font-size:11px;font-weight:800;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.22);">${label}</div>`;
+    const o = new kakao.maps.CustomOverlay({ position: pos, content, yAnchor: 0.5 });
     o.setMap(map);
     overlays.push(o);
-    lastOverlayData.push({ pos: pos, content: content }); /* 모달 동기화용 */
+    lastOverlayData.push({ pos, content });
 }
 
+/* ── 경로 목록 ── */
 function addStep(num, name, circleClass, badgeText, badgeStyle) {
-    var list = document.getElementById('route-steps');
-    var div  = document.createElement('div');
+    const list = document.getElementById('route-steps');
+    const div  = document.createElement('div');
     div.className = 'step-item';
-    var bc = badgeStyle ? 'step-badge ' + badgeStyle : 'step-badge';
-    var bh = badgeText ? '<span class="' + bc + '">' + badgeText + '</span>' : '';
-    div.innerHTML = '<div class="step-circle ' + circleClass + '">' + num + '</div>'
-        + '<div class="step-text">' + name + '</div>' + bh;
+    const bc = badgeStyle ? `step-badge ${badgeStyle}` : 'step-badge';
+    const bh = badgeText  ? `<span class="${bc}">${badgeText}</span>` : '';
+    div.innerHTML = `<div class="step-circle ${circleClass}">${num}</div>`
+        + `<div class="step-text">${name}</div>${bh}`;
     list.appendChild(div);
 }
 
 /* ── 지도 전체보기 모달 ── */
-var mapFull = null;
-var polylineFull = null;
-var overlaysFull = [];
-var lastPath = [];   /* 마지막으로 생성된 경로 저장 */
-
 function openMapModal() {
     document.getElementById('map-modal').classList.add('show');
     document.body.style.overflow = 'hidden';
-
     if (!mapFull) {
         mapFull = new kakao.maps.Map(document.getElementById('map-full'), {
             center: new kakao.maps.LatLng(START.lat, START.lng),
@@ -626,118 +510,105 @@ function closeMapModal() {
 }
 
 function syncFullMap() {
-    if (!mapFull || lastPath.length === 0) return;
-
-    /* 기존 요소 제거 */
+    if (!mapFull || !lastPath.length) return;
     if (polylineFull) polylineFull.setMap(null);
-    overlaysFull.forEach(function(o) { o.setMap(null); });
+    overlaysFull.forEach(o => o.setMap(null));
     overlaysFull = [];
 
-    /* 폴리라인 복사 */
     polylineFull = new kakao.maps.Polyline({
         path: lastPath, strokeWeight: 8,
         strokeColor: '#4A90E2', strokeOpacity: 0.9, strokeStyle: 'solid'
     });
     polylineFull.setMap(mapFull);
 
-    /* 오버레이 복사 */
-    lastOverlayData.forEach(function(od) {
-        var o = new kakao.maps.CustomOverlay({
-            position: od.pos, content: od.content, yAnchor: 0.5
-        });
+    lastOverlayData.forEach(({ pos, content }) => {
+        const o = new kakao.maps.CustomOverlay({ position: pos, content, yAnchor: 0.5 });
         o.setMap(mapFull);
         overlaysFull.push(o);
     });
 
-    /* 범위 맞추기 */
-    var bounds = new kakao.maps.LatLngBounds();
-    lastPath.forEach(function(p) { bounds.extend(p); });
+    const bounds = new kakao.maps.LatLngBounds();
+    lastPath.forEach(p => bounds.extend(p));
     mapFull.setBounds(bounds, 60, 60, 60, 60);
 }
 
-var lastOverlayData = []; /* 오버레이 데이터 저장 */
-
 /* ── 날씨 연동 (Open-Meteo, 키 불필요) ── */
 function loadWeather() {
-    var lat = START.lat, lng = START.lng;
+    const url = `https://api.open-meteo.com/v1/forecast`
+        + `?latitude=${START.lat}&longitude=${START.lng}`
+        + `&current=temperature_2m,weather_code,windspeed_10m`  /* weather_code: 최신 API 필드명 */
+        + `&timezone=Asia%2FSeoul`;
 
-    /* WMO 날씨 코드 → 이모지 + 설명 */
     function decodeWMO(code) {
-        if (code === 0)            return { icon: '☀️',  text: '맑음' };
-        if (code <= 2)             return { icon: '🌤️',  text: '구름 조금' };
-        if (code === 3)            return { icon: '☁️',  text: '흐림' };
-        if (code <= 49)            return { icon: '🌫️',  text: '안개' };
-        if (code <= 59)            return { icon: '🌦️',  text: '이슬비' };
-        if (code <= 69)            return { icon: '🌧️',  text: '비' };
-        if (code <= 79)            return { icon: '❄️',  text: '눈' };
-        if (code <= 84)            return { icon: '🌧️',  text: '소나기' };
-        if (code <= 99)            return { icon: '⛈️',  text: '뇌우' };
+        if (code === 0)   return { icon: '☀️',  text: '맑음' };
+        if (code <= 2)    return { icon: '🌤️',  text: '구름 조금' };
+        if (code === 3)   return { icon: '☁️',  text: '흐림' };
+        if (code <= 49)   return { icon: '🌫️',  text: '안개' };
+        if (code <= 59)   return { icon: '🌦️',  text: '이슬비' };
+        if (code <= 69)   return { icon: '🌧️',  text: '비' };
+        if (code <= 79)   return { icon: '❄️',  text: '눈' };
+        if (code <= 84)   return { icon: '🌧️',  text: '소나기' };
+        if (code <= 99)   return { icon: '⛈️',  text: '뇌우' };
         return { icon: '🌡️', text: '알 수 없음' };
     }
 
-    /* 산책 적합도 판단 */
-    function getAdvice(temp, code, windspeed) {
-        if (code >= 80)  return { text: '산책 비추 🚫', color: '#FFE0E0', tcolor: '#E74C3C' };
-        if (code >= 60)  return { text: '우산 필요 ☂️', color: '#FFF3CD', tcolor: '#E67E22' };
-        if (temp >= 33)  return { text: '더위 주의 🥵', color: '#FFE0E0', tcolor: '#E74C3C' };
-        if (temp <= 0)   return { text: '방한 필수 🧣', color: '#E8F4FD', tcolor: '#2980B9' };
-        if (temp <= 10)  return { text: '쌀쌀해요 🧥', color: '#E8F4FD', tcolor: '#2980B9' };
-        if (windspeed >= 30) return { text: '바람 강함 💨', color: '#FFF3CD', tcolor: '#E67E22' };
+    function getAdvice(temp, code, wind) {
+        if (code >= 80)   return { text: '산책 비추 🚫', color: '#FFE0E0', tcolor: '#E74C3C' };
+        if (code >= 60)   return { text: '우산 필요 ☂️', color: '#FFF3CD', tcolor: '#E67E22' };
+        if (temp >= 33)   return { text: '더위 주의 🥵', color: '#FFE0E0', tcolor: '#E74C3C' };
+        if (temp <= 0)    return { text: '방한 필수 🧣', color: '#E8F4FD', tcolor: '#2980B9' };
+        if (temp <= 10)   return { text: '쌀쌀해요 🧥',  color: '#E8F4FD', tcolor: '#2980B9' };
+        if (wind >= 30)   return { text: '바람 강함 💨', color: '#FFF3CD', tcolor: '#E67E22' };
         return { text: '산책 최적 ✅', color: '#EAFAF1', tcolor: '#27AE60' };
     }
 
-    var url = 'https://api.open-meteo.com/v1/forecast'
-        + '?latitude=' + lat
-        + '&longitude=' + lng
-        + '&current=temperature_2m,weathercode,windspeed_10m'
-        + '&timezone=Asia%2FSeoul';
-
     fetch(url)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            var cur   = data.current;
-            var temp  = Math.round(cur.temperature_2m);
-            var code  = cur.weathercode;
-            var wind  = Math.round(cur.windspeed_10m);
-            var wmo   = decodeWMO(code);
-            var adv   = getAdvice(temp, code, wind);
+        .then(r => r.json())
+        .then(data => {
+            const cur  = data.current;
+            const temp = Math.round(cur.temperature_2m);
+            /* weather_code / weathercode 둘 다 대응 */
+            const code = cur.weather_code ?? cur.weathercode ?? 0;
+            const wind = Math.round(cur.windspeed_10m);
+            const wmo  = decodeWMO(code);
+            const adv  = getAdvice(temp, code, wind);
 
             document.getElementById('weather-icon').innerText = wmo.icon;
-            document.getElementById('weather-text').innerText =
-                wmo.text + ' ' + temp + '°C · 바람 ' + wind + 'km/h';
+            document.getElementById('weather-text').innerText = `${wmo.text} ${temp}°C · 바람 ${wind}km/h`;
 
-            var advEl = document.getElementById('weather-advice');
-            advEl.innerText = adv.text;
+            const advEl = document.getElementById('weather-advice');
+            advEl.innerText        = adv.text;
             advEl.style.background = adv.color;
-            advEl.style.color = adv.tcolor;
+            advEl.style.color      = adv.tcolor;
 
-            /* 날씨 바 배경도 적합도에 맞게 */
-            document.getElementById('weather-bar').style.background = adv.color;
-            document.getElementById('weather-bar').style.borderColor = adv.tcolor + '44';
+            const bar = document.getElementById('weather-bar');
+            bar.style.background   = adv.color;
+            bar.style.borderColor  = adv.tcolor + '44';
         })
-        .catch(function() {
+        .catch(() => {
             document.getElementById('weather-text').innerText = '날씨 정보 없음';
             document.getElementById('weather-icon').innerText = '🌡️';
         });
 }
 
-/* ── SDK 로드 ── */
-(function() {
-    var s = document.createElement('script');
+/* ── 카카오맵 SDK 로드 ── */
+(function () {
+    const s = document.createElement('script');
     s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=5bf686763d5c82b0aebf1b5b7932af06&autoload=false';
-    s.onload = function() { kakao.maps.load(initMap); };
-    s.onerror = function() {
+    s.onload  = () => kakao.maps.load(initMap);
+    s.onerror = () => {
         document.getElementById('overlay').innerHTML =
-            '<div style="text-align:center;padding:24px;">'
-            + '<p style="color:#E74C3C;font-size:1rem;font-weight:800;margin:0 0 10px;">지도를 불러오지 못했습니다</p>'
-            + '<p style="color:#666;font-size:0.82rem;line-height:1.7;margin:0 0 14px;">'
-            + '카카오맵 API 키에 현재 도메인이<br>등록되지 않았을 수 있습니다.<br><br>'
-            + '<b>해결 방법:</b><br>'
-            + '카카오 개발자 콘솔 → 내 애플리케이션<br>'
-            + '→ 플랫폼 → Web → 사이트 도메인에<br>'
-            + '<b style="color:#4A90E2;">' + location.origin + '</b><br>추가 후 새로고침</p>'
-            + '<button onclick="location.reload()" style="padding:10px 24px;background:#4A90E2;color:#fff;border:none;border-radius:10px;font-size:0.9rem;font-weight:700;cursor:pointer;">새로고침</button>'
-            + '</div>';
+            `<div style="text-align:center;padding:24px;">
+                <p style="color:#E74C3C;font-size:1rem;font-weight:800;margin:0 0 10px;">지도를 불러오지 못했습니다</p>
+                <p style="color:#666;font-size:0.82rem;line-height:1.7;margin:0 0 14px;">
+                    카카오맵 API 키에 현재 도메인이<br>등록되지 않았을 수 있습니다.<br><br>
+                    <b>해결 방법:</b><br>
+                    카카오 개발자 콘솔 → 내 애플리케이션<br>
+                    → 플랫폼 → Web → 사이트 도메인에<br>
+                    <b style="color:#4A90E2;">${location.origin}</b><br>추가 후 새로고침
+                </p>
+                <button onclick="location.reload()" style="padding:10px 24px;background:#4A90E2;color:#fff;border:none;border-radius:10px;font-size:0.9rem;font-weight:700;cursor:pointer;">새로고침</button>
+            </div>`;
     };
     document.head.appendChild(s);
 })();
