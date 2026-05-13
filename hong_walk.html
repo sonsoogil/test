@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>홍장군 전용 산책 케어</title>
+    <style>
+        :root {
+            --accent: #4A90E2;
+            --coral: #FF6B6B;
+            --bg: #F8F9FD;
+            --white: #FFFFFF;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: var(--white);
+            padding: env(safe-area-inset-top, 12px) 20px 13px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+        header h1 { margin: 0; font-size: 1.25rem; color: var(--accent); font-weight: 900; letter-spacing: -0.5px; }
+        header p  { margin: 3px 0 0; font-size: 0.73rem; color: #888; }
+
+        #map { flex: 1; width: 100%; min-height: 0; }
+
+        .controls {
+            background: var(--white);
+            padding: 14px 15px calc(env(safe-area-inset-bottom, 8px) + 8px);
+            border-top-left-radius: 22px;
+            border-top-right-radius: 22px;
+            box-shadow: 0 -8px 28px rgba(0,0,0,0.09);
+            z-index: 110;
+            max-height: 62%;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sec { margin-bottom: 11px; }
+        .sec label {
+            display: block;
+            font-size: 0.73rem;
+            color: #555;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        /* 시간 버튼: 5개 */
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        /* 속도 버튼: 3개 */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+        .sel-btn {
+            padding: 9px 2px;
+            border: 2px solid #E1E8F0;
+            border-radius: 11px;
+            background: #F5F7FA;
+            color: #666;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            line-height: 1.25;
+            transition: all 0.14s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .sel-btn .sub {
+            display: block;
+            font-size: 0.58rem;
+            font-weight: 500;
+            color: #aaa;
+            margin-top: 1px;
+        }
+        .sel-btn.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(74,144,226,0.32);
+        }
+        .sel-btn.active .sub { color: rgba(255,255,255,0.8); }
+
+        /* 대시보드 */
+        .dash {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .card {
+            background: #F0F5FB;
+            padding: 8px 4px;
+            border-radius: 11px;
+            text-align: center;
+            border: 1px solid #E1EAF4;
+        }
+        .card span   { display: block; font-size: 0.58rem; color: #777; margin-bottom: 2px; }
+        .card strong { font-size: 0.85rem; color: var(--accent); font-weight: 800; }
+
+        .gen-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            color: #fff;
+            font-size: 0.97rem;
+            font-weight: 800;
+            box-shadow: 0 5px 16px rgba(74,144,226,0.33);
+            cursor: pointer;
+            transition: all 0.18s;
+            margin-bottom: 13px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .gen-btn:active { transform: scale(0.97); filter: brightness(0.9); }
+
+        .route-section h2 { font-size: 0.84rem; color: #444; margin: 0 0 8px 2px; font-weight: 700; }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 10px 12px;
+            background: #fff;
+            border-radius: 11px;
+            border: 1px solid #EFEFEF;
+        }
+        .step-circle {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 800; color: #fff;
+            margin-right: 10px; flex-shrink: 0;
+        }
+        .c-start { background: #5C6BC0; }
+        .c-way   { background: var(--coral); }
+        .c-home  { background: #2ECC71; }
+
+        .step-text { font-size: 0.86rem; font-weight: 600; color: #333; flex: 1; }
+        .step-badge {
+            font-size: 0.6rem; border-radius: 5px;
+            padding: 2px 6px; font-weight: 700; flex-shrink: 0;
+            background: #EEF2FF; color: #5C6BC0;
+        }
+        .step-badge.coral { background: #FFF0F0; color: var(--coral); }
+        .step-badge.green { background: #EAFAF1; color: #27AE60; }
+
+        #overlay {
+            display: none; position: absolute;
+            inset: 0; background: rgba(248,249,253,0.88);
+            z-index: 200; align-items: center; justify-content: center; flex-direction: column;
+        }
+        #overlay.show { display: flex; }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 4px solid #E1E8F0; border-top-color: var(--accent);
+            border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #overlay p { font-size: 0.82rem; color: #666; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚩 홍장군 전용 산책 케어</h1>
+    <p>힐스테이트 청계 정문 출발 · 귀가 고정</p>
+</header>
+
+<div id="map"></div>
+<div id="overlay" class="show">
+    <div class="spinner"></div>
+    <p>지도 불러오는 중...</p>
+</div>
+
+<div class="controls">
+
+    <!-- 산책 시간 -->
+    <div class="sec">
+        <label>⏰ 산책 시간</label>
+        <div class="grid-5">
+            <button class="sel-btn time-btn" data-min="30"  onclick="selectTime(30)">30분<span class="sub" id="sub-30">-</span></button>
+            <button class="sel-btn time-btn" data-min="45"  onclick="selectTime(45)">45분<span class="sub" id="sub-45">-</span></button>
+            <button class="sel-btn time-btn active" data-min="60"  onclick="selectTime(60)">60분<span class="sub" id="sub-60">-</span></button>
+            <button class="sel-btn time-btn" data-min="75"  onclick="selectTime(75)">75분<span class="sub" id="sub-75">-</span></button>
+            <button class="sel-btn time-btn" data-min="90"  onclick="selectTime(90)">90분<span class="sub" id="sub-90">-</span></button>
+        </div>
+    </div>
+
+    <!-- 걸음 속도 -->
+    <div class="sec">
+        <label>🐾 걸음 속도</label>
+        <div class="grid-3">
+            <button class="sel-btn speed-btn" data-speed="2.5" onclick="selectSpeed(2.5)">🐢 천천히<span class="sub">2.5km/h</span></button>
+            <button class="sel-btn speed-btn active" data-speed="4.0" onclick="selectSpeed(4.0)">🚶 보통<span class="sub">4.0km/h</span></button>
+            <button class="sel-btn speed-btn" data-speed="5.5" onclick="selectSpeed(5.5)">🏃 빠르게<span class="sub">5.5km/h</span></button>
+        </div>
+    </div>
+
+    <!-- 대시보드 -->
+    <div class="dash">
+        <div class="card"><span>⏱️ 시간</span><strong id="dsh-time">60분</strong></div>
+        <div class="card"><span>🎯 목표거리</span><strong id="dsh-target">-km</strong></div>
+        <div class="card"><span>📏 실제거리</span><strong id="dsh-real">-km</strong></div>
+        <div class="card"><span>⚡ 속도</span><strong id="dsh-speed">4.0</strong></div>
+    </div>
+
+    <button class="gen-btn" onclick="generateRandomCourse()">🐾 오늘의 홍장군 코스 생성</button>
+
+    <div class="route-section">
+        <h2>📋 상세 이동 가이드</h2>
+        <div id="route-steps"></div>
+    </div>
+
+</div>
+
+<script>
+/* ── 출발지 ── */
+const START = { lat: 37.57152873927553, lng: 127.04760981436473, name: "힐스테이트 청계" };
+
+/* ── 경유지 풀 (출발지까지의 직선 거리 km 포함) ──
+   dist = 출발지에서 해당 경유지까지의 직선 거리(km)
+   실제 걷는 거리는 왕복이므로 dist*2 가 해당 경유지 1개를 찍을 때 기본 소요 거리
+*/
+const WP_POOL = [
+    /* ~0.5km 이내 */
+    { name: "청계천 수변로 (근처)", lat: 37.5700, lng: 127.0465, tag: "수변길", dist: 0.35 },
+    { name: "용답동 근린공원",      lat: 37.5668, lng: 127.0512, tag: "공원",   dist: 0.55 },
+    /* ~0.8km */
+    { name: "청계천 마장2교",       lat: 37.5703, lng: 127.0432, tag: "수변길", dist: 0.75 },
+    { name: "간데메 공원",          lat: 37.5748, lng: 127.0518, tag: "공원",   dist: 0.75 },
+    { name: "신답역 사거리",        lat: 37.5648, lng: 127.0481, tag: "평지",   dist: 0.75 },
+    /* ~1.2km */
+    { name: "청계천 고산자교",      lat: 37.5712, lng: 127.0382, tag: "수변길", dist: 1.10 },
+    { name: "답십리역 광장",        lat: 37.5672, lng: 127.0555, tag: "평지",   dist: 1.10 },
+    { name: "용답동 한천로",        lat: 37.5618, lng: 127.0535, tag: "평지",   dist: 1.05 },
+    /* ~1.8km */
+    { name: "청계천 사근교",        lat: 37.5718, lng: 127.0348, tag: "수변길", dist: 1.70 },
+    { name: "청계천 용답교",        lat: 37.5693, lng: 127.0540, tag: "수변길", dist: 1.20 },
+    { name: "장안교 사거리",        lat: 37.5750, lng: 127.0615, tag: "평지",   dist: 1.60 },
+    /* ~2.5km+ (장거리용) */
+    { name: "청계천 군자교",        lat: 37.5682, lng: 127.0612, tag: "수변길", dist: 2.10 },
+    { name: "배봉산 공원 입구",     lat: 37.5820, lng: 127.0622, tag: "공원",   dist: 2.30 },
+    { name: "청계천 화양교",        lat: 37.5675, lng: 127.0678, tag: "수변길", dist: 2.60 },
+];
+
+let map, polyline, overlays = [];
+let selMin = 60, selSpd = 4.0, mapReady = false;
+
+/* ── 선택 핸들러 ── */
+function selectTime(min) {
+    selMin = min;
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.toggle('active', +b.dataset.min === min));
+    document.getElementById('dsh-time').innerText = min + '분';
+    refresh();
+}
+function selectSpeed(spd) {
+    selSpd = spd;
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.toggle('active', +b.dataset.speed === spd));
+    document.getElementById('dsh-speed').innerText = spd.toFixed(1);
+    refresh();
+}
+
+/* 시간·속도 변경 시 대시보드와 버튼 서브텍스트 갱신 */
+function refresh() {
+    var targetKm = selSpd * selMin / 60;
+    document.getElementById('dsh-target').innerText = targetKm.toFixed(1) + 'km';
+    [30,45,60,75,90].forEach(function(m) {
+        var el = document.getElementById('sub-' + m);
+        if (el) el.innerText = '~' + (selSpd * m / 60).toFixed(1) + 'km';
+    });
+    generateRandomCourse(); /* 버튼 누를 때마다 무조건 코스 재생성 */
+}
+
+/* ── 목표 거리에 맞는 경유지 선택 ──
+   목표거리 = speed × time
+   경유지를 하나씩 추가할 때마다 "출발→경유지→...→출발" 총 직선 거리 합산.
+   총합이 목표거리를 넘지 않는 범위에서 최대한 채움.
+*/
+function pickWaypoints(targetKm) {
+    var maxWp = targetKm < 3.0 ? 1 : 2;
+
+    /* 1단계: 각 경유지의 왕복 직선거리를 계산해 목표에 가까운 순으로 정렬 */
+    var scored = WP_POOL.map(function(pt) {
+        var roundTrip = haversine(START.lat, START.lng, pt.lat, pt.lng) * 2;
+        return { pt: pt, roundTrip: roundTrip, diff: Math.abs(roundTrip - targetKm) };
+    });
+    /* 목표거리 초과분은 무조건 제외, 이하인 것들만 남김 */
+    var valid = scored.filter(function(s) { return s.roundTrip <= targetKm * 1.05; });
+    /* 유효 후보가 너무 없으면 전체에서 가장 가까운 순 */
+    if (valid.length < maxWp + 1) valid = scored;
+    /* 목표거리에 가까운 순 정렬 */
+    valid.sort(function(a, b) { return a.diff - b.diff; });
+
+    /* 2단계: 상위 절반(최소 maxWp+2개)만 추려서 셔플 → 매번 다른 결과 */
+    var topN = Math.max(maxWp + 2, Math.ceil(valid.length / 2));
+    var pool = valid.slice(0, topN).map(function(s) { return s.pt; });
+
+    /* Fisher-Yates 셔플 */
+    for (var i = pool.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+
+    return pool.slice(0, maxWp);
+}
+
+/* Haversine 거리 (km) */
+function haversine(lat1, lng1, lat2, lng2) {
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLng = (lng2 - lng1) * Math.PI / 180;
+    var a = Math.sin(dLat/2)*Math.sin(dLat/2)
+          + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)
+          * Math.sin(dLng/2)*Math.sin(dLng/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+/* ── 지도 초기화 ── */
+function initMap() {
+    map = new kakao.maps.Map(document.getElementById('map'), {
+        center: new kakao.maps.LatLng(START.lat, START.lng),
+        level: 5
+    });
+    mapReady = true;
+    document.getElementById('overlay').classList.remove('show');
+    refresh();
+}
+
+/* ── 코스 생성 ── */
+function generateRandomCourse() {
+    if (!mapReady) return;
+
+    if (polyline) polyline.setMap(null);
+    overlays.forEach(function(o) { o.setMap(null); });
+    overlays = [];
+    document.getElementById('route-steps').innerHTML = '';
+
+    var targetKm = selSpd * selMin / 60;
+    var selected = pickWaypoints(targetKm);
+
+    var startLL = new kakao.maps.LatLng(START.lat, START.lng);
+    var path = [startLL];
+
+    addOverlay(startLL, '출', '#5C6BC0');
+    addStep('출', START.name + ' (출발)', 'c-start', '출발', '');
+
+    selected.forEach(function(pt, i) {
+        var pos = new kakao.maps.LatLng(pt.lat, pt.lng);
+        path.push(pos);
+        addOverlay(pos, String(i+1), '#FF6B6B');
+        addStep(String(i+1), pt.name, 'c-way', pt.tag, 'coral');
+    });
+
+    path.push(startLL);
+    addOverlay(new kakao.maps.LatLng(START.lat - 0.0002, START.lng + 0.0002), '귀', '#2ECC71');
+    addStep('귀', START.name + ' (귀가)', 'c-home', '도착', 'green');
+
+    polyline = new kakao.maps.Polyline({
+        path: path, strokeWeight: 7,
+        strokeColor: '#4A90E2', strokeOpacity: 0.85, strokeStyle: 'solid'
+    });
+    polyline.setMap(map);
+
+    var realKm = polyline.getLength() / 1000;
+    document.getElementById('dsh-real').innerText = realKm.toFixed(1) + 'km';
+
+    var bounds = new kakao.maps.LatLngBounds();
+    path.forEach(function(p) { bounds.extend(p); });
+    map.setBounds(bounds, 70, 70, 70, 70);
+}
+
+function addOverlay(pos, label, color) {
+    var content = '<div style="background:' + color + ';color:#fff;border-radius:50%;'
+        + 'width:30px;height:30px;display:flex;align-items:center;justify-content:center;'
+        + 'font-size:11px;font-weight:800;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.22);">'
+        + label + '</div>';
+    var o = new kakao.maps.CustomOverlay({ position: pos, content: content, yAnchor: 0.5 });
+    o.setMap(map);
+    overlays.push(o);
+}
+
+function addStep(num, name, circleClass, badgeText, badgeStyle) {
+    var list = document.getElementById('route-steps');
+    var div  = document.createElement('div');
+    div.className = 'step-item';
+    var bc = badgeStyle ? 'step-badge ' + badgeStyle : 'step-badge';
+    var bh = badgeText ? '<span class="' + bc + '">' + badgeText + '</span>' : '';
+    div.innerHTML = '<div class="step-circle ' + circleClass + '">' + num + '</div>'
+        + '<div class="step-text">' + name + '</div>' + bh;
+    list.appendChild(div);
+}
+
+/* ── SDK 로드 ── */
+(function() {
+    var s = document.createElement('script');
+    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=5bf686763d5c82b0aebf1b5b7932af06&autoload=false';
+    s.onload = function() { kakao.maps.load(initMap); };
+    s.onerror = function() {
+        document.getElementById('overlay').innerHTML =
+            '<p style="color:#E74C3C;font-weight:700;text-align:center;padding:20px;">'
+            + '지도를 불러오지 못했습니다.<br>네트워크 연결을 확인해주세요.</p>';
+    };
+    document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
