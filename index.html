@@ -228,30 +228,28 @@
 /* ── 출발지 ── */
 const START = { lat: 37.57152873927553, lng: 127.04760981436473, name: "힐스테이트 청계" };
 
-/* ── 경유지 풀 (출발지까지의 직선 거리 km 포함) ──
-   dist = 출발지에서 해당 경유지까지의 직선 거리(km)
-   실제 걷는 거리는 왕복이므로 dist*2 가 해당 경유지 1개를 찍을 때 기본 소요 거리
-*/
+/* ── 경유지 풀: 출발지(37.5715, 127.0476)에서 실측 직선거리(km) 기준 ── */
 const WP_POOL = [
-    /* ~0.5km 이내 */
-    { name: "청계천 수변로 (근처)", lat: 37.5700, lng: 127.0465, tag: "수변길", dist: 0.35 },
+    /* 0.3~0.6km */
+    { name: "청계천 수변로",        lat: 37.5700, lng: 127.0465, tag: "수변길", dist: 0.35 },
     { name: "용답동 근린공원",      lat: 37.5668, lng: 127.0512, tag: "공원",   dist: 0.55 },
-    /* ~0.8km */
-    { name: "청계천 마장2교",       lat: 37.5703, lng: 127.0432, tag: "수변길", dist: 0.75 },
-    { name: "간데메 공원",          lat: 37.5748, lng: 127.0518, tag: "공원",   dist: 0.75 },
-    { name: "신답역 사거리",        lat: 37.5648, lng: 127.0481, tag: "평지",   dist: 0.75 },
-    /* ~1.2km */
-    { name: "청계천 고산자교",      lat: 37.5712, lng: 127.0382, tag: "수변길", dist: 1.10 },
-    { name: "답십리역 광장",        lat: 37.5672, lng: 127.0555, tag: "평지",   dist: 1.10 },
-    { name: "용답동 한천로",        lat: 37.5618, lng: 127.0535, tag: "평지",   dist: 1.05 },
-    /* ~1.8km */
-    { name: "청계천 사근교",        lat: 37.5718, lng: 127.0348, tag: "수변길", dist: 1.70 },
-    { name: "청계천 용답교",        lat: 37.5693, lng: 127.0540, tag: "수변길", dist: 1.20 },
-    { name: "장안교 사거리",        lat: 37.5750, lng: 127.0615, tag: "평지",   dist: 1.60 },
-    /* ~2.5km+ (장거리용) */
-    { name: "청계천 군자교",        lat: 37.5682, lng: 127.0612, tag: "수변길", dist: 2.10 },
-    { name: "배봉산 공원 입구",     lat: 37.5820, lng: 127.0622, tag: "공원",   dist: 2.30 },
-    { name: "청계천 화양교",        lat: 37.5675, lng: 127.0678, tag: "수변길", dist: 2.60 },
+    /* 0.7~1.0km */
+    { name: "청계천 마장2교",       lat: 37.5703, lng: 127.0432, tag: "수변길", dist: 0.78 },
+    { name: "간데메 공원",          lat: 37.5748, lng: 127.0518, tag: "공원",   dist: 0.76 },
+    { name: "신답역 사거리",        lat: 37.5648, lng: 127.0481, tag: "평지",   dist: 0.74 },
+    /* 1.0~1.4km */
+    { name: "청계천 고산자교",      lat: 37.5712, lng: 127.0382, tag: "수변길", dist: 1.12 },
+    { name: "답십리역 광장",        lat: 37.5672, lng: 127.0555, tag: "평지",   dist: 1.08 },
+    { name: "용답동 한천로",        lat: 37.5618, lng: 127.0535, tag: "평지",   dist: 1.10 },
+    /* 1.4~2.0km */
+    { name: "청계천 사근교",        lat: 37.5718, lng: 127.0348, tag: "수변길", dist: 1.72 },
+    { name: "청계천 용답교",        lat: 37.5693, lng: 127.0540, tag: "수변길", dist: 1.22 },
+    { name: "장안교 사거리",        lat: 37.5750, lng: 127.0615, tag: "평지",   dist: 1.58 },
+    /* 2.0~3.0km */
+    { name: "청계천 군자교",        lat: 37.5682, lng: 127.0612, tag: "수변길", dist: 2.08 },
+    { name: "배봉산 공원 입구",     lat: 37.5820, lng: 127.0622, tag: "공원",   dist: 2.28 },
+    { name: "청계천 화양교",        lat: 37.5675, lng: 127.0678, tag: "수변길", dist: 2.58 },
+    { name: "어린이대공원 방향",    lat: 37.5490, lng: 127.0820, tag: "공원",   dist: 3.80 },
 ];
 
 let map, polyline, overlays = [];
@@ -288,31 +286,36 @@ function refresh() {
    총합이 목표거리를 넘지 않는 범위에서 최대한 채움.
 */
 function pickWaypoints(targetKm) {
-    var maxWp = targetKm < 3.0 ? 1 : 2;
+    /* 목표거리에 따라 경유지 수 결정
+       경유지 1개: 왕복이므로 단일 경유지까지의 거리 ≈ targetKm / 2
+       경유지 2개: 각 경유지까지 거리 ≈ targetKm / 3
+       → 경유지마다 "이상적인 거리(idealDist)" 계산 후 가장 가까운 것 선택 */
+    var maxWp = targetKm < 2.5 ? 1 : 2;
+    var idealDist = targetKm / (maxWp + 1); /* 경유지 1개당 이상 거리 */
 
-    /* 1단계: 각 경유지의 왕복 직선거리를 계산해 목표에 가까운 순으로 정렬 */
+    /* 각 경유지에 실제 직선거리와 이상거리 차이(오차) 계산 */
     var scored = WP_POOL.map(function(pt) {
-        var roundTrip = haversine(START.lat, START.lng, pt.lat, pt.lng) * 2;
-        return { pt: pt, roundTrip: roundTrip, diff: Math.abs(roundTrip - targetKm) };
+        var d = haversine(START.lat, START.lng, pt.lat, pt.lng);
+        return { pt: pt, d: d, err: Math.abs(d - idealDist) };
     });
-    /* 목표거리 초과분은 무조건 제외, 이하인 것들만 남김 */
-    var valid = scored.filter(function(s) { return s.roundTrip <= targetKm * 1.05; });
-    /* 유효 후보가 너무 없으면 전체에서 가장 가까운 순 */
-    if (valid.length < maxWp + 1) valid = scored;
-    /* 목표거리에 가까운 순 정렬 */
-    valid.sort(function(a, b) { return a.diff - b.diff; });
 
-    /* 2단계: 상위 절반(최소 maxWp+2개)만 추려서 셔플 → 매번 다른 결과 */
-    var topN = Math.max(maxWp + 2, Math.ceil(valid.length / 2));
-    var pool = valid.slice(0, topN).map(function(s) { return s.pt; });
+    /* 이상거리에 가까운 순 정렬 */
+    scored.sort(function(a, b) { return a.err - b.err; });
 
-    /* Fisher-Yates 셔플 */
+    /* 상위 후보(최소 4개) 중 Fisher-Yates 셔플로 랜덤 선택 */
+    var topN = Math.max(4, Math.ceil(scored.length * 0.4));
+    var pool = scored.slice(0, topN);
     for (var i = pool.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
     }
 
-    return pool.slice(0, maxWp);
+    /* maxWp개 선택 (중복 없이) */
+    var chosen = [];
+    for (var k = 0; k < pool.length && chosen.length < maxWp; k++) {
+        chosen.push(pool[k].pt);
+    }
+    return chosen;
 }
 
 /* Haversine 거리 (km) */
@@ -408,8 +411,16 @@ function addStep(num, name, circleClass, badgeText, badgeStyle) {
     s.onload = function() { kakao.maps.load(initMap); };
     s.onerror = function() {
         document.getElementById('overlay').innerHTML =
-            '<p style="color:#E74C3C;font-weight:700;text-align:center;padding:20px;">'
-            + '지도를 불러오지 못했습니다.<br>네트워크 연결을 확인해주세요.</p>';
+            '<div style="text-align:center;padding:24px;">'
+            + '<p style="color:#E74C3C;font-size:1rem;font-weight:800;margin:0 0 10px;">지도를 불러오지 못했습니다</p>'
+            + '<p style="color:#666;font-size:0.82rem;line-height:1.7;margin:0 0 14px;">'
+            + '카카오맵 API 키에 현재 도메인이<br>등록되지 않았을 수 있습니다.<br><br>'
+            + '<b>해결 방법:</b><br>'
+            + '카카오 개발자 콘솔 → 내 애플리케이션<br>'
+            + '→ 플랫폼 → Web → 사이트 도메인에<br>'
+            + '<b style="color:#4A90E2;">' + location.origin + '</b><br>추가 후 새로고침</p>'
+            + '<button onclick="location.reload()" style="padding:10px 24px;background:#4A90E2;color:#fff;border:none;border-radius:10px;font-size:0.9rem;font-weight:700;cursor:pointer;">새로고침</button>'
+            + '</div>';
     };
     document.head.appendChild(s);
 })();
